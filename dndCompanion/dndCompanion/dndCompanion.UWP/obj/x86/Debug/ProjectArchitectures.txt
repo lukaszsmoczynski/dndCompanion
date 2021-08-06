@@ -1,1 +1,0 @@
-D:\Szkola\Programowanie\Git\dndCompanion\dndCompanion\dndCompanion\dndCompanion.UWP\dndCompanion.UWP.csproj;x86
