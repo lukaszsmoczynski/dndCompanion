@@ -34,7 +34,7 @@ namespace dndCompanion.ViewModels
             try
             {
                 Items.Clear();
-                var items = await DataStore.GetItemsAsync(true);
+                var items = await DataStore.GetSpellsAsync(true);
                 foreach (var item in items)
                 {
                     Items.Add(item);

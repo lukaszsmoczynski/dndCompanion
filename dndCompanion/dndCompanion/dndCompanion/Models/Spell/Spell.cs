@@ -12,15 +12,15 @@ namespace dndCompanion.Models.Spell
         public string Name { get; set; }
         public int Level { get; set; }
         public SpellSchool School { get; set; }
-        public SpellCastTime CastTime { get; set; }
-        public SpellRange Range { get; set; }
-        public SpellComponents Components { get; set; }
-        public SpellDuration Duration { get; set; }
+        public SpellCastTime CastTime { get; set; } = new SpellCastTime();
+        public SpellRange Range { get; set; } = new SpellRange();
+        public SpellComponents Components { get; set; } = new SpellComponents();
+        public SpellDuration Duration { get; set; } = new SpellDuration();
         public string Description { get; set; }
-        public List<Roll> Rolls { get; set; }
-        public List<CasterClass> Classes { get; set; }
+        public List<Roll> Rolls { get; set; } = new List<Roll>();
+        public List<ICasterClass> Classes { get; set; } = new List<ICasterClass>();
         public bool Ritual { get; set; }
-        public List<Upcasting> Upcasting { get; set; }
+        public List<Upcasting> Upcasting { get; set; } = new List<Upcasting>();
 
         //public Spell(string name)
         //{

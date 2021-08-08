@@ -14,13 +14,12 @@
                 IsGrouped="True">
             <CollectionView.GroupHeaderTemplate>
                 <DataTemplate>
-                    <StackLayout Padding="10" x:DataType="x:Object">
-                        <Label Text="{Binding Name}"
+                    <StackLayout Padding="0" x:DataType="viewModel:SpellGroup">
+                        <Label Text="{Binding Title}"
                            BackgroundColor="{StaticResource Primary}"
                            FontSize="Large"
                            FontAttributes="Bold"
-                               >
-                        </Label>
+                        />
                         <StackLayout.GestureRecognizers>
                             <TapGestureRecognizer 
                                 NumberOfTapsRequired="1"
@@ -33,22 +32,25 @@
             </CollectionView.GroupHeaderTemplate>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <StackLayout Padding="10" x:DataType="model:Spell">
-                        <Label Text="{Binding Name}" 
+                    <StackLayout Padding="20,0,20,5" x:DataType="model:Spell">
+                        <StackLayout Padding="0,0,0,5" BackgroundColor="Gray">
+                            <Label Margin="5, 0, 0, 0" Text="{Binding Name}" 
                             LineBreakMode="NoWrap" 
                             Style="{DynamicResource ListItemTextStyle}" 
                             FontSize="16" />
-                        <Label Text="{Binding Description}" 
+                            <Label Margin="5, 0, 0, 0"
+                                   Text="{Binding School}" 
                             LineBreakMode="NoWrap"
                             Style="{DynamicResource ListItemDetailTextStyle}"
                             FontSize="13" />
-                        <!--<StackLayout.GestureRecognizers>
+                        </StackLayout>
+                        <StackLayout.GestureRecognizers>
                             <TapGestureRecognizer 
                                 NumberOfTapsRequired="1"
-                                Command="{Binding Source={RelativeSource AncestorType={x:Type local:ItemsViewModel}}, Path=ItemTapped}"		
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:SpellsViewModel}}, Path=ItemTapped}"		
                                 CommandParameter="{Binding .}">
                             </TapGestureRecognizer>
-                        </StackLayout.GestureRecognizers>-->
+                        </StackLayout.GestureRecognizers>
                     </StackLayout>
                 </DataTemplate>
             </CollectionView.ItemTemplate>

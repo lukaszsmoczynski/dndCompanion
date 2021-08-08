@@ -13,7 +13,7 @@ namespace dndCompanion.Views.Spell
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class SpellsPage : ContentPage
     {
-        SpellsViewModel _viewModel;
+        readonly SpellsViewModel _viewModel;
 
         public SpellsPage()
         {

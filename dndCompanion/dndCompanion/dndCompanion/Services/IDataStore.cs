@@ -6,10 +6,10 @@ namespace dndCompanion.Services
 {
     public interface IDataStore<T>
     {
-        Task<bool> AddItemAsync(T item);
-        Task<bool> UpdateItemAsync(T item);
-        Task<bool> DeleteItemAsync(string id);
-        Task<T> GetItemAsync(string id);
-        Task<IEnumerable<T>> GetItemsAsync(bool forceRefresh = false);
+        Task<bool> AddSpellAsync(T item);
+        Task<bool> UpdateSpellAsync(T item);
+        Task<bool> DeleteSpellAsync(string id);
+        Task<T> GetSpellAsync(string id);
+        Task<IEnumerable<T>> GetSpellsAsync(bool forceRefresh = false);
     }
 }

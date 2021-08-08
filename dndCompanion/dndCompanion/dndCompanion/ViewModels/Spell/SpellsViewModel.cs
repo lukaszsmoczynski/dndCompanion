@@ -1,4 +1,5 @@
-﻿using System;
+﻿using dndCompanion.Views.Spell;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -9,43 +10,45 @@ using Xamarin.Forms;
 
 namespace dndCompanion.ViewModels.Spell
 {
-    class SpellsViewModel : BaseViewModel
+    public class SpellGroup : ObservableCollection<Models.Spell.Spell>, INotifyPropertyChanged
     {
-        public class SpellGroup : ObservableCollection<Models.Spell.Spell>, INotifyPropertyChanged
+        private bool _expanded;
+        public int Level { get; private set; }
+        public string Title { get => Level == 0 ? "Cantrip" : "Level " + Level; }
+        public bool Expanded
         {
-            private bool _expanded;
-            public string Name { get; private set; }
-            public bool Expanded
+            get => _expanded;
+            set
             {
-                get => _expanded;
-                set
+                if (_expanded != value)
                 {
-                    if (_expanded != value)
-                    {
-                        _expanded = value;
-                        OnPropertyChanged("Expanded");
-                    }
+                    _expanded = value;
+                    OnPropertyChanged("Expanded");
                 }
             }
-            public SpellGroup(string name, List<Models.Spell.Spell> spells) : base(spells)
-            {
-                Name = name;
-                _expanded = true;
-            }
-
-            public event PropertyChangedEventHandler PropertyChanged;
-            protected virtual void OnPropertyChanged(string propertyName)
-            {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            }
+        }
+        public SpellGroup(int level, List<Models.Spell.Spell> spells, bool expanded = false) : base(spells)
+        {
+            Level = level;
+            _expanded = expanded;
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+
+    class SpellsViewModel : BaseViewModel
+    {
         private Models.Spell.Spell _selectedSpell;
 
         public List<SpellGroup> AllSpells { get; private set; } = new List<SpellGroup>();
         public List<SpellGroup> Spells { get; private set; } = new List<SpellGroup>();
         //public ObservableCollection<Models.Spell.Spell> Spells { get; }
         public Command LoadSpellsCommand { get; }
+        public Command<Models.Spell.Spell> ItemTapped { get; }
         public Command<SpellGroup> HeaderTapped { get; }
 
         public SpellsViewModel()
@@ -54,7 +57,7 @@ namespace dndCompanion.ViewModels.Spell
             //Spells = new ObservableCollection<Models.Spell.Spell>();
             LoadSpellsCommand = new Command(async () => await ExecuteLoadSpellsCommand());
 
-            //ItemTapped = new Command<Models.Spell.Spell>(OnItemSelected);
+            ItemTapped = new Command<Models.Spell.Spell>(OnItemSelected);
             HeaderTapped = new Command<SpellGroup>(OnHeaderSelected);
         }
 
@@ -65,7 +68,7 @@ namespace dndCompanion.ViewModels.Spell
             try
             {
                 Spells.Clear();
-                var spells = await DataStore.GetItemsAsync(true);
+                var spells = await DataStore.GetSpellsAsync(true);
 
                 var spellsDictionary = new Dictionary<int, List<Models.Spell.Spell>>();
                 foreach (var spell in spells)
@@ -82,11 +85,11 @@ namespace dndCompanion.ViewModels.Spell
 
                 foreach (var spellList in spellsDictionary)
                 {
-                    Spells.Add(new SpellGroup(spellList.Key.ToString(), spellList.Value));
-                    AllSpells.Add(new SpellGroup(spellList.Key.ToString(), spellList.Value));
+                    Spells.Add(new SpellGroup(spellList.Key, new List<Models.Spell.Spell>()));
+                    AllSpells.Add(new SpellGroup(spellList.Key, spellList.Value));
                 }
-                Spells.Sort((l, r) => l.Name.CompareTo(r.Name));
-                AllSpells.Sort((l, r) => l.Name.CompareTo(r.Name));
+                Spells.Sort((l, r) => l.Level.CompareTo(r.Level));
+                AllSpells.Sort((l, r) => l.Level.CompareTo(r.Level));
             }
             catch (Exception ex)
             {
@@ -114,27 +117,24 @@ namespace dndCompanion.ViewModels.Spell
             SelectedItem = null;
         }
 
-        async void OnItemSelected(Models.Spell.Spell item)
+        async void OnItemSelected(Models.Spell.Spell spell)
         {
-            if (item == null)
+            if (spell == null)
                 return;
 
-            // This will push the ItemDetailPage onto the navigation stack
-            //await Shell.Current.GoToAsync($"{nameof(ItemDetailPage)}?{nameof(ItemDetailViewModel.Name)}={item.Name}");
+            await Shell.Current.GoToAsync($"{nameof(SpellDetailPage)}?{nameof(SpellDetailViewModel.SpellName)}={spell.Name}");
         }
 
-        //async 
-            void OnHeaderSelected(SpellGroup header)
+        void OnHeaderSelected(SpellGroup header)
         {
-            header = Spells[0];
             if (header == null)
                 return;
 
-            var x = Spells.Find(level => level.Name.Equals(header.Name));
+            var x = Spells.Find(level => level.Level.Equals(header.Level));
             x.Expanded = !x.Expanded;
             if (x.Expanded)
             { 
-                foreach (var spell in AllSpells.Find(level => level.Name.Equals(header.Name)))
+                foreach (var spell in AllSpells.Find(level => level.Level.Equals(header.Level)))
                 {
                     header.Add(spell);
                 }
@@ -143,9 +143,6 @@ namespace dndCompanion.ViewModels.Spell
             {
                 header.Clear();
             }
-
-            // This will push the ItemDetailPage onto the navigation stack
-            //await Shell.Current.GoToAsync($"{nameof(ItemDetailPage)}?{nameof(ItemDetailViewModel.Name)}={item.Name}");
         }
     }
 }

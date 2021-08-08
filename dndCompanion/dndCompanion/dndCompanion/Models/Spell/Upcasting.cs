@@ -7,6 +7,6 @@ namespace dndCompanion.Models.Spell
     {
         public int Level { get; set; }
         public string Description { get; set; }
-        public List<Roll> Rolls { get; set; }
+        public List<Roll> Rolls { get; set; } = new List<Roll>();
     }
 }

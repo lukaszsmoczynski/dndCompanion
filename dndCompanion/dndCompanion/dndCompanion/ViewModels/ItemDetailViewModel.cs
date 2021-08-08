@@ -43,7 +43,7 @@ namespace dndCompanion.ViewModels
         {
             try
             {
-                var item = await DataStore.GetItemAsync(itemId);
+                var item = await DataStore.GetSpellAsync(itemId);
                 Name = "";
                 Text = item.Name;
                 Description = item.Description;

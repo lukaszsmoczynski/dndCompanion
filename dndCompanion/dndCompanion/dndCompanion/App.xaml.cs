@@ -1,4 +1,4 @@
-﻿using dndCompanion.Services;
+﻿using dndCompanion.Services.DndDataStore;
 using dndCompanion.Views;
 using System;
 using Xamarin.Forms;
@@ -12,8 +12,11 @@ namespace dndCompanion
         public App()
         {
             InitializeComponent();
-
+#if DEBUG
             DependencyService.Register<MockDndDataStore>();
+#else
+            DependencyService.Register<DndDataStore>();
+#endif
             MainPage = new AppShell();
         }
 
