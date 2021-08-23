@@ -1,12 +1,7 @@
-﻿using dndCompanion.Models.Spell;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace dndCompanion.Models.Character.Class
+﻿namespace dndCompanion.Models.Character.Class
 {
-    public class Wizard : ICharacterClass, ICasterClass
+    public class Wizard : CasterClass
     {
-        public string Name => "Wizard";
+        public override string Name => "Wizard";
     }
 }

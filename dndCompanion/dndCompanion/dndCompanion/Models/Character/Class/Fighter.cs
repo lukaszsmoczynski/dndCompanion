@@ -1,12 +1,7 @@
-﻿using dndCompanion.Models.Spell;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace dndCompanion.Models.Character.Class
+﻿namespace dndCompanion.Models.Character.Class
 {
-    public class Fighter : ICharacterClass
+    public class Fighter : CharacterClass
     {
-        public string Name => "Fighter";
+        public override string Name => "Fighter";
     }
 }

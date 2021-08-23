@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace dndCompanion.Models.Character.Class.Subclass.Paladin
+﻿namespace dndCompanion.Models.Character.Class.Subclass.Paladin
 {
     class Oathbreaker : Class.Paladin
     {
+        public override string Name => "Paladin (Oathbreaker)";
     }
 }

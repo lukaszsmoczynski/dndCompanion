@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace dndCompanion.Models.Character.Class.Subclass.Artificer
+﻿namespace dndCompanion.Models.Character.Class.Subclass.Artificer
 {
     class ChronoManipulator : Class.Artificer
     {
-        public string Name => "Artificer (ChronoManipulator)";
+        public override string Name => "Artificer (ChronoManipulator)";
     }
 }

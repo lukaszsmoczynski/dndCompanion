@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace dndCompanion.Models.Dice
 {
     public class Roll
     {
         public string Description { get; set; }
-        public Dictionary<Dice, int> Dices { get; set; }
+        public IDictionary<uint, int> Dices { get; set; }
     }
 }

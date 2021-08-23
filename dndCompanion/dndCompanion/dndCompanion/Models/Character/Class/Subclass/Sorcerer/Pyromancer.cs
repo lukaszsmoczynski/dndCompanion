@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace dndCompanion.Models.Character.Class.Subclass.Sorcerer
+﻿namespace dndCompanion.Models.Character.Class.Subclass.Sorcerer
 {
     class Pyromancer : Class.Sorcerer
     {
+        public override string Name => "Sorcerer (Pyromancer)";
     }
 }

@@ -1,6 +1,4 @@
-﻿using dndCompanion.Models;
-using dndCompanion.Models.Spell;
-using dndCompanion.Services;
+﻿using dndCompanion.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,10 +7,8 @@ using Xamarin.Forms;
 
 namespace dndCompanion.ViewModels
 {
-    public class BaseViewModel : INotifyPropertyChanged
+    public class BaseViewModel<T> : INotifyPropertyChanged
     {
-        public IDataStore<Models.Spell.Spell> DataStore => DependencyService.Get<IDataStore<Models.Spell.Spell>>();
-
         bool isBusy = false;
         public bool IsBusy
         {

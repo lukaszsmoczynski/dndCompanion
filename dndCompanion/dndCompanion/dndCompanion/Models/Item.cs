@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace dndCompanion.Models
+﻿namespace dndCompanion.Models
 {
     public class Item
     {

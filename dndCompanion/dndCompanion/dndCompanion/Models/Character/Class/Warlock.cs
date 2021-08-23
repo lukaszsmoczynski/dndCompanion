@@ -1,12 +1,7 @@
-﻿using dndCompanion.Models.Spell;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace dndCompanion.Models.Character.Class
+﻿namespace dndCompanion.Models.Character.Class
 {
-    public class Warlock : ICharacterClass, ICasterClass
+    public class Warlock : CasterClass
     {
-        public string Name => "Warlock";
+        public override string Name => "Warlock";
     }
 }

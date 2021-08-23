@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace dndCompanion.Models.Character.Class.Subclass.Druid.CircleOfTheLand2
+﻿namespace dndCompanion.Models.Character.Class.Subclass.Druid.CircleOfTheLand2
 {
     class Underdark : CircleOfTheLand
     {
+        public override string Name => "Druid (Circle of the Land)[Underdark]";
     }
 }

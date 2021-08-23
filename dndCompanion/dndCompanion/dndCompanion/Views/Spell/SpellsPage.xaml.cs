@@ -1,9 +1,4 @@
-﻿using dndCompanion.ViewModels.Spell;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using dndCompanion.ViewModels.Spells;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -18,6 +13,7 @@ namespace dndCompanion.Views.Spell
         public SpellsPage()
         {
             InitializeComponent();
+            Routing.RegisterRoute(nameof(SpellDetailPage), typeof(SpellDetailPage));
 
             BindingContext = _viewModel = new SpellsViewModel();
         }

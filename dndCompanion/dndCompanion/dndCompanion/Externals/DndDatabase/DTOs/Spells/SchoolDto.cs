@@ -1,6 +1,6 @@
-﻿namespace dndCompanion.Models.Spell
+﻿namespace dndCompanion.Externals.DndDatabase.DTOs.Spells
 {
-    public enum SpellSchool
+    public enum SchoolDto
     {
         Abjuration,
         Conjuration,

@@ -1,8 +1,8 @@
-﻿using dndCompanion.Services.DndDataStore;
-using dndCompanion.Views;
-using System;
+﻿using dndCompanion.Externals.DndDatabase;
+using dndCompanion.Services.DndDataStore.Character;
+using dndCompanion.Services.DndDataStore.Spells;
+using System.Net;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace dndCompanion
 {
@@ -13,9 +13,15 @@ namespace dndCompanion
         {
             InitializeComponent();
 #if DEBUG
-            DependencyService.Register<MockDndDataStore>();
+            ServicePointManager.ServerCertificateValidationCallback += (_, _, _, _) => true;
+            //DependencyService.Register<MockSpellsDataStore>();
+            DependencyService.Register<ISpellsDataStore, SpellsDataStore>();
+            DependencyService.Register<MockClassesDataStore>();
+
+            DependencyService.RegisterSingleton<IDndDatabaseClient>(new DndDatabaseClient());
 #else
-            DependencyService.Register<DndDataStore>();
+            DependencyService.Register<DataStore>();
+            DependencyService.Register<ClassesDataStore>();
 #endif
             MainPage = new AppShell();
         }

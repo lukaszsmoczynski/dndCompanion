@@ -1,12 +1,7 @@
-﻿using dndCompanion.Models.Spell;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace dndCompanion.Models.Character.Class
+﻿namespace dndCompanion.Models.Character.Class
 {
-    public class Barbarian : ICharacterClass
+    public class Barbarian : CharacterClass
     {
-        public string Name => "Barbarian";
+        public override string Name => "Barbarian";
     }
 }

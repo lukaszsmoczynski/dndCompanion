@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace dndCompanion.Models.Character.Class.Subclass.Wizard
+﻿namespace dndCompanion.Models.Character.Class.Subclass.Wizard
 {
     class SchoolOfEvocation : Class.Wizard
     {
+        public override string Name => "Wizard (School of Evocation)";
     }
 }

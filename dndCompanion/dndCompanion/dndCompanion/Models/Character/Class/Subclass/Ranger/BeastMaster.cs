@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace dndCompanion.Models.Character.Class.Subclass.Ranger
+﻿namespace dndCompanion.Models.Character.Class.Subclass.Ranger
 {
     class BeastMaster : Class.Ranger
     {
+        public override string Name => "Ranger (Beast Master)";
     }
 }

@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace dndCompanion.Models.Character.Class.Subclass.Fighter
+﻿namespace dndCompanion.Models.Character.Class.Subclass.Fighter
 {
     class EchoKnight : Class.Fighter
     {
+        public override string Name => "Fighter (Echo Knight)";
     }
 }

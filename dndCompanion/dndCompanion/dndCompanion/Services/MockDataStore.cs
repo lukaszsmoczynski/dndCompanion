@@ -23,14 +23,14 @@ namespace dndCompanion.Services
             };
         }
 
-        public async Task<bool> AddSpellAsync(Item item)
+        public async Task<bool> AddAsync(Item item)
         {
             items.Add(item);
 
             return await Task.FromResult(true);
         }
 
-        public async Task<bool> UpdateSpellAsync(Item item)
+        public async Task<bool> UpdateAsync(Item item)
         {
             var oldItem = items.Where((Item arg) => arg.Id == item.Id).FirstOrDefault();
             items.Remove(oldItem);
@@ -39,20 +39,24 @@ namespace dndCompanion.Services
             return await Task.FromResult(true);
         }
 
-        public async Task<bool> DeleteSpellAsync(string id)
+        public async Task<bool> DeleteAsync(Guid id)
         {
-            var oldItem = items.Where((Item arg) => arg.Id == id).FirstOrDefault();
+            var oldItem = items
+                //.Where((Item arg) => arg.Id == id)
+                .FirstOrDefault();
             items.Remove(oldItem);
 
             return await Task.FromResult(true);
         }
 
-        public async Task<Item> GetSpellAsync(string id)
+        public async Task<Item> GetOneAsync(Guid id)
         {
-            return await Task.FromResult(items.FirstOrDefault(s => s.Id == id));
+            return await Task.FromResult(items.FirstOrDefault(
+                //s => s.Id == id
+                ));
         }
 
-        public async Task<IEnumerable<Item>> GetSpellsAsync(bool forceRefresh = false)
+        public async Task<IEnumerable<Item>> GetAllAsync(bool forceRefresh = false)
         {
             return await Task.FromResult(items);
         }

@@ -1,14 +1,10 @@
 ﻿using dndCompanion.Models;
-using dndCompanion.Models.Spell;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace dndCompanion.ViewModels
 {
-    public class NewItemViewModel : BaseViewModel
+    public class NewItemViewModel : BaseViewModel<Item>
     {
         private string text;
         private string description;
@@ -50,13 +46,13 @@ namespace dndCompanion.ViewModels
 
         private async void OnSave()
         {
-            Models.Spell.Spell newItem = new Models.Spell.Spell()
-            {
-                Name = Text,
-                Description = Description
-            };
+            //Models.Spell.Spell newItem = new Models.Spell.Spell()
+            //{
+            //    Name = Text,
+            //    Description = Description
+            //};
 
-            await DataStore.AddSpellAsync(newItem);
+            //await DataStore.AddAsync(newItem);
 
             // This will pop the current page off the navigation stack
             await Shell.Current.GoToAsync("..");

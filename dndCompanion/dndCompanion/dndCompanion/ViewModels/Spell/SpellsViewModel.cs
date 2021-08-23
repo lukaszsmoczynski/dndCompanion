@@ -1,20 +1,22 @@
-﻿using dndCompanion.Views.Spell;
+﻿using dndCompanion.Models.Spells;
+using dndCompanion.Services.DndDataStore.Spells;
+using dndCompanion.Views.Spell;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
-namespace dndCompanion.ViewModels.Spell
+namespace dndCompanion.ViewModels.Spells
 {
-    public class SpellGroup : ObservableCollection<Models.Spell.Spell>, INotifyPropertyChanged
+    public class SpellGroup : ObservableCollection<Spell>, INotifyPropertyChanged
     {
         private bool _expanded;
         public int Level { get; private set; }
-        public string Title { get => Level == 0 ? "Cantrip" : "Level " + Level; }
+        public string Title => Level == 0 ? "Cantrip" : "Level " + Level;
         public bool Expanded
         {
             get => _expanded;
@@ -27,37 +29,39 @@ namespace dndCompanion.ViewModels.Spell
                 }
             }
         }
-        public SpellGroup(int level, List<Models.Spell.Spell> spells, bool expanded = false) : base(spells)
+        public SpellGroup(int level, List<Spell> spells, bool expanded = false) : base(spells)
         {
             Level = level;
             _expanded = expanded;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged(string propertyName)
+        public virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 
-    class SpellsViewModel : BaseViewModel
+    class SpellsViewModel : BaseViewModel<Spell>
     {
-        private Models.Spell.Spell _selectedSpell;
+        public ISpellsDataStore DataStore => DependencyService.Get<ISpellsDataStore>();
 
-        public List<SpellGroup> AllSpells { get; private set; } = new List<SpellGroup>();
-        public List<SpellGroup> Spells { get; private set; } = new List<SpellGroup>();
-        //public ObservableCollection<Models.Spell.Spell> Spells { get; }
+        private Spell _selectedSpell;
+
+        public Dictionary<int, IEnumerable<Spell>> AllSpells { get; private set; }
+        public Dictionary<int, IEnumerable<Spell>> FilteredSpells { get; private set; }
+        public ObservableCollection<SpellGroup> VisibleSpells { get; private set; } = new ObservableCollection<SpellGroup>();
+
         public Command LoadSpellsCommand { get; }
-        public Command<Models.Spell.Spell> ItemTapped { get; }
+        public Command<Spell> ItemTapped { get; }
         public Command<SpellGroup> HeaderTapped { get; }
-
         public SpellsViewModel()
         {
             Title = "Spells";
-            //Spells = new ObservableCollection<Models.Spell.Spell>();
+
             LoadSpellsCommand = new Command(async () => await ExecuteLoadSpellsCommand());
 
-            ItemTapped = new Command<Models.Spell.Spell>(OnItemSelected);
+            ItemTapped = new Command<Spell>(OnItemSelected);
             HeaderTapped = new Command<SpellGroup>(OnHeaderSelected);
         }
 
@@ -67,29 +71,19 @@ namespace dndCompanion.ViewModels.Spell
 
             try
             {
-                Spells.Clear();
-                var spells = await DataStore.GetSpellsAsync(true);
+                VisibleSpells.Clear();
+                var spells = await DataStore.GetAllAsync();
+                AllSpells = spells
+                    .GroupBy(spell => spell.Level)
+                    .OrderBy(group => group.Key)
+                    .ToDictionary(group => group.Key, group => group.Select(x => x));
+                FilteredSpells = new(AllSpells);
 
-                var spellsDictionary = new Dictionary<int, List<Models.Spell.Spell>>();
-                foreach (var spell in spells)
+                VisibleSpells.Clear();
+                foreach (var group in FilteredSpells)
                 {
-                    if (!spellsDictionary.ContainsKey(spell.Level))
-                    {
-                        spellsDictionary.Add(spell.Level, new List<Models.Spell.Spell>());
-                    }
-                    else
-                    {
-                        spellsDictionary[spell.Level].Add(spell);
-                    }
+                    VisibleSpells.Add(new(group.Key, new()));
                 }
-
-                foreach (var spellList in spellsDictionary)
-                {
-                    Spells.Add(new SpellGroup(spellList.Key, new List<Models.Spell.Spell>()));
-                    AllSpells.Add(new SpellGroup(spellList.Key, spellList.Value));
-                }
-                Spells.Sort((l, r) => l.Level.CompareTo(r.Level));
-                AllSpells.Sort((l, r) => l.Level.CompareTo(r.Level));
             }
             catch (Exception ex)
             {
@@ -101,7 +95,7 @@ namespace dndCompanion.ViewModels.Spell
             }
         }
 
-        public Models.Spell.Spell SelectedItem
+        public Spell SelectedSpell
         {
             get => _selectedSpell;
             set
@@ -114,15 +108,15 @@ namespace dndCompanion.ViewModels.Spell
         public void OnAppearing()
         {
             IsBusy = true;
-            SelectedItem = null;
+            SelectedSpell = null;
         }
 
-        async void OnItemSelected(Models.Spell.Spell spell)
+        async void OnItemSelected(Spell spell)
         {
             if (spell == null)
                 return;
 
-            await Shell.Current.GoToAsync($"{nameof(SpellDetailPage)}?{nameof(SpellDetailViewModel.SpellName)}={spell.Name}");
+            await Shell.Current.GoToAsync($"{nameof(SpellDetailPage)}?{nameof(SpellDetailViewModel.Id)}={spell.Id}");
         }
 
         void OnHeaderSelected(SpellGroup header)
@@ -130,12 +124,13 @@ namespace dndCompanion.ViewModels.Spell
             if (header == null)
                 return;
 
-            var x = Spells.Find(level => level.Level.Equals(header.Level));
-            x.Expanded = !x.Expanded;
-            if (x.Expanded)
-            { 
-                foreach (var spell in AllSpells.Find(level => level.Level.Equals(header.Level)))
+            header.Expanded = !header.Expanded;
+            if (header.Expanded)
+            {
+                var spellGroup = FilteredSpells.First(level => level.Key.Equals(header.Level));
+                foreach (var spell in spellGroup.Value)
                 {
+
                     header.Add(spell);
                 }
             }

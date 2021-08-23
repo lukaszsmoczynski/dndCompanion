@@ -1,12 +1,9 @@
 ﻿using dndCompanion.Views;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Xamarin.Forms;
 
 namespace dndCompanion.ViewModels
 {
-    public class LoginViewModel : BaseViewModel
+    public class LoginViewModel : BaseViewModel<string>
     {
         public Command LoginCommand { get; }
 

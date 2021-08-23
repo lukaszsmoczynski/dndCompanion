@@ -2,16 +2,54 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="dndCompanion.Views.Spell.SpellDetailPage"
-             xmlns:viewModel="clr-namespace:dndCompanion.ViewModels.Spell"
-             Title="{Binding SpellName}">
+             xmlns:viewModel="clr-namespace:dndCompanion.ViewModels.Spells"
+             x:DataType="viewModel:SpellDetailViewModel"
+             Title="{Binding Spell.Name}">
 
-    <StackLayout Spacing="20" Padding="15" x:DataType="viewModel:SpellDetailViewModel">
-        <Label Text="Name:" FontSize="Medium" />
-        <Label Text="{Binding Spell.Name}" FontSize="Small"/>
-        <Label Text="Description:" FontSize="Medium" />
-        <Label Text="{Binding Spell.Description}" FontSize="Small"/>
-        <Label Text="Components:" FontSize="Medium" />
-        <Label Text="{Binding Spell.Components.Material, StringFormat='Material:{}{0}'}" FontSize="Small"/>
-        <Label Text="{Binding ClassNames}" FontSize="Small"/>
+    <StackLayout Spacing="10" Padding="15" x:DataType="viewModel:SpellDetailViewModel">
+        <StackLayout VerticalOptions="Start">
+            <StackLayout>
+                <Label Text="{Binding Spell.Name}" FontSize="Medium"/>
+                <Label FontSize="Small" FontAttributes="Italic">
+                    <Label.Text>
+                        <MultiBinding StringFormat="{}{0} {1}">
+                            <Binding Path="Level"/>
+                            <Binding Path="Spell.School"/>
+                        </MultiBinding>
+                    </Label.Text>
+                </Label>
+            </StackLayout>
+            <StackLayout IsVisible="{Binding HasComponents}">
+                <Label TextType="Html" Text="&lt;b&gt;Components:&lt;/b&gt;:" />
+                <StackLayout IsVisible="{Binding Spell.Components.Verbal}">
+                    <Label TextType="Html"  Text="Verbal" />
+                </StackLayout>
+                <StackLayout IsVisible="{Binding Spell.Components.Somatic}">
+                    <Label TextType="Html" Text="Somatic" />
+                </StackLayout>
+                <StackLayout IsVisible="{Binding Spell.Components.Material}">
+                    <Label TextType="Html"  Text="Material" />
+                </StackLayout>
+                <StackLayout IsVisible="{Binding MaterialComponents.Length}">
+                    <Label TextType="Html"
+                   Text="&lt;b&gt;Material components:&lt;/b&gt;">
+                    </Label>
+                    <Label TextType="Html"
+                   Text="{Binding MaterialComponents}">
+                    </Label>
+                </StackLayout>
+            </StackLayout>
+        </StackLayout>
+        <StackLayout VerticalOptions="FillAndExpand">
+            <Label Text="{Binding Spell.Description}" 
+                       FontSize="Small"/>
+        </StackLayout>
+        <StackLayout VerticalOptions="End">
+            <ListView 
+                ItemsSource="{Binding SpellClasses}" 
+                SelectionMode="None" 
+                VerticalOptions="EndAndExpand" 
+                HeightRequest="{Binding ClassesListViewHeight}" />
+        </StackLayout>
     </StackLayout>
 </ContentPage>
